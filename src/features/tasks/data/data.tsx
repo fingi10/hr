@@ -13,7 +13,7 @@ import {
 export const labels = [
   {
     value: 'bug',
-    label: 'Bug',
+    label: 'Fehler',
   },
   {
     value: 'feature',
@@ -21,7 +21,7 @@ export const labels = [
   },
   {
     value: 'documentation',
-    label: 'Documentation',
+    label: 'Dokumentation',
   },
 ]
 
@@ -32,22 +32,22 @@ export const statuses = [
     icon: HelpCircle,
   },
   {
-    label: 'Todo',
+    label: 'Zu erledigen',
     value: 'todo' as const,
     icon: Circle,
   },
   {
-    label: 'In Progress',
+    label: 'In Bearbeitung',
     value: 'in progress' as const,
     icon: Timer,
   },
   {
-    label: 'Done',
+    label: 'Erledigt',
     value: 'done' as const,
     icon: CheckCircle,
   },
   {
-    label: 'Canceled',
+    label: 'Abgebrochen',
     value: 'canceled' as const,
     icon: CircleOff,
   },
@@ -55,22 +55,22 @@ export const statuses = [
 
 export const priorities = [
   {
-    label: 'Low',
+    label: 'Niedrig',
     value: 'low' as const,
     icon: ArrowDown,
   },
   {
-    label: 'Medium',
+    label: 'Mittel',
     value: 'medium' as const,
     icon: ArrowRight,
   },
   {
-    label: 'High',
+    label: 'Hoch',
     value: 'high' as const,
     icon: ArrowUp,
   },
   {
-    label: 'Critical',
+    label: 'Kritisch',
     value: 'critical' as const,
     icon: AlertCircle,
   },

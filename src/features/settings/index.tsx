@@ -11,27 +11,27 @@ import { SidebarNav } from './components/sidebar-nav'
 
 const sidebarNavItems = [
   {
-    title: 'Profile',
+    title: 'Profil',
     href: '/settings',
     icon: <UserCog size={18} />,
   },
   {
-    title: 'Account',
+    title: 'Konto',
     href: '/settings/account',
     icon: <Wrench size={18} />,
   },
   {
-    title: 'Appearance',
+    title: 'Erscheinungsbild',
     href: '/settings/appearance',
     icon: <Palette size={18} />,
   },
   {
-    title: 'Notifications',
+    title: 'Benachrichtigungen',
     href: '/settings/notifications',
     icon: <Bell size={18} />,
   },
   {
-    title: 'Display',
+    title: 'Anzeige',
     href: '/settings/display',
     icon: <Monitor size={18} />,
   },
@@ -53,10 +53,10 @@ export function Settings() {
       <Main fixed>
         <div className='space-y-0.5'>
           <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
-            Settings
+            Einstellungen
           </h1>
           <p className='text-muted-foreground'>
-            Manage your account settings and set e-mail preferences.
+            Verwalten Sie Ihre Kontoeinstellungen und E-Mail-Präferenzen.
           </p>
         </div>
         <Separator className='my-4 lg:my-6' />

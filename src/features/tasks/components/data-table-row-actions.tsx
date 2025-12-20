@@ -38,7 +38,7 @@ export function DataTableRowActions<TData>({
           className='flex h-8 w-8 p-0 data-[state=open]:bg-muted'
         >
           <DotsHorizontalIcon className='h-4 w-4' />
-          <span className='sr-only'>Open menu</span>
+          <span className='sr-only'>Menü öffnen</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-[160px]'>
@@ -48,10 +48,10 @@ export function DataTableRowActions<TData>({
             setOpen('update')
           }}
         >
-          Edit
+          Bearbeiten
         </DropdownMenuItem>
-        <DropdownMenuItem disabled>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem disabled>Favorite</DropdownMenuItem>
+        <DropdownMenuItem disabled>Kopie erstellen</DropdownMenuItem>
+        <DropdownMenuItem disabled>Favorisieren</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
@@ -72,7 +72,7 @@ export function DataTableRowActions<TData>({
             setOpen('delete')
           }}
         >
-          Delete
+          Löschen
           <DropdownMenuShortcut>
             <Trash2 size={16} />
           </DropdownMenuShortcut>

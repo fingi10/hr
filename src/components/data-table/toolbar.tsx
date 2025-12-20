@@ -22,7 +22,7 @@ type DataTableToolbarProps<TData> = {
 
 export function DataTableToolbar<TData>({
   table,
-  searchPlaceholder = 'Filter...',
+  searchPlaceholder = 'Filtern...',
   searchKey,
   filters = [],
 }: DataTableToolbarProps<TData>) {
@@ -74,12 +74,12 @@ export function DataTableToolbar<TData>({
             }}
             className='h-8 px-2 lg:px-3'
           >
-            Reset
+            Zurücksetzen
             <Cross2Icon className='ms-2 h-4 w-4' />
           </Button>
         )}
       </div>
       <DataTableViewOptions table={table} />
-    </div>
+    </div >
   )
 }

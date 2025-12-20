@@ -26,11 +26,11 @@ const formSchema = z.object({
   file: z
     .instanceof(FileList)
     .refine((files) => files.length > 0, {
-      message: 'Please upload a file',
+      message: 'Bitte laden Sie eine Datei hoch',
     })
     .refine(
       (files) => ['text/csv'].includes(files?.[0]?.type),
-      'Please upload csv format.'
+      'Bitte laden Sie das CSV-Format hoch.'
     ),
 })
 
@@ -59,7 +59,7 @@ export function TasksImportDialog({
         size: file[0].size,
         type: file[0].type,
       }
-      showSubmittedData(fileDetails, 'You have imported the following file:')
+      showSubmittedData(fileDetails, 'Sie haben die folgende Datei importiert:')
     }
     onOpenChange(false)
   }
@@ -74,9 +74,9 @@ export function TasksImportDialog({
     >
       <DialogContent className='gap-2 sm:max-w-sm'>
         <DialogHeader className='text-start'>
-          <DialogTitle>Import Tasks</DialogTitle>
+          <DialogTitle>Aufgaben importieren</DialogTitle>
           <DialogDescription>
-            Import tasks quickly from a CSV file.
+            Importieren Sie Aufgaben schnell aus einer CSV-Datei.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -86,7 +86,7 @@ export function TasksImportDialog({
               name='file'
               render={() => (
                 <FormItem className='my-2'>
-                  <FormLabel>File</FormLabel>
+                  <FormLabel>Datei</FormLabel>
                   <FormControl>
                     <Input type='file' {...fileRef} className='h-8 py-0' />
                   </FormControl>
@@ -98,10 +98,10 @@ export function TasksImportDialog({
         </Form>
         <DialogFooter className='gap-2'>
           <DialogClose asChild>
-            <Button variant='outline'>Close</Button>
+            <Button variant='outline'>Schließen</Button>
           </DialogClose>
           <Button type='submit' form='task-import-form'>
-            Import
+            Importieren
           </Button>
         </DialogFooter>
       </DialogContent>

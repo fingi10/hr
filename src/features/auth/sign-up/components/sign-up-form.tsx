@@ -20,16 +20,16 @@ const formSchema = z
   .object({
     email: z.email({
       error: (iss) =>
-        iss.input === '' ? 'Please enter your email' : undefined,
+        iss.input === '' ? 'Bitte geben Sie Ihre E-Mail-Adresse ein' : undefined,
     }),
     password: z
       .string()
-      .min(1, 'Please enter your password')
-      .min(7, 'Password must be at least 7 characters long'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+      .min(1, 'Bitte geben Sie Ihr Passwort ein')
+      .min(7, 'Das Passwort muss mindestens 7 Zeichen lang sein'),
+    confirmPassword: z.string().min(1, 'Bitte bestätigen Sie Ihr Passwort'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: "Passwörter stimmen nicht überein.",
     path: ['confirmPassword'],
   })
 
@@ -70,7 +70,7 @@ export function SignUpForm({
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-Mail</FormLabel>
               <FormControl>
                 <Input placeholder='name@example.com' {...field} />
               </FormControl>
@@ -83,7 +83,7 @@ export function SignUpForm({
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Passwort</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -96,7 +96,7 @@ export function SignUpForm({
           name='confirmPassword'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Passwort bestätigen</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -105,7 +105,7 @@ export function SignUpForm({
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
-          Create Account
+          Konto erstellen
         </Button>
 
         <div className='relative my-2'>
@@ -114,7 +114,7 @@ export function SignUpForm({
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
             <span className='bg-background px-2 text-muted-foreground'>
-              Or continue with
+              Oder weiter mit
             </span>
           </div>
         </div>

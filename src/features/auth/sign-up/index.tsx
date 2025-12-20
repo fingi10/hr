@@ -16,16 +16,16 @@ export function SignUp() {
       <Card className='gap-4'>
         <CardHeader>
           <CardTitle className='text-lg tracking-tight'>
-            Create an account
+            Konto erstellen
           </CardTitle>
           <CardDescription>
-            Enter your email and password to create an account. <br />
-            Already have an account?{' '}
+            Geben Sie Ihre E-Mail und Ihr Passwort ein, um ein Konto zu erstellen. <br />
+            Haben Sie bereits ein Konto?{' '}
             <Link
               to='/sign-in'
               className='underline underline-offset-4 hover:text-primary'
             >
-              Sign In
+              Anmelden
             </Link>
           </CardDescription>
         </CardHeader>
@@ -34,21 +34,21 @@ export function SignUp() {
         </CardContent>
         <CardFooter>
           <p className='px-8 text-center text-sm text-muted-foreground'>
-            By creating an account, you agree to our{' '}
+            Durch die Erstellung eines Kontos stimmen Sie unseren{' '}
             <a
               href='/terms'
               className='underline underline-offset-4 hover:text-primary'
             >
-              Terms of Service
+              Nutzungsbedingungen
             </a>{' '}
-            and{' '}
+            und der{' '}
             <a
               href='/privacy'
               className='underline underline-offset-4 hover:text-primary'
             >
-              Privacy Policy
-            </a>
-            .
+              Datenschutzrichtlinie
+            </a>{' '}
+            zu.
           </p>
         </CardFooter>
       </Card>

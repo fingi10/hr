@@ -26,20 +26,20 @@ import { Textarea } from '@/components/ui/textarea'
 
 const profileFormSchema = z.object({
   username: z
-    .string('Please enter your username.')
-    .min(2, 'Username must be at least 2 characters.')
-    .max(30, 'Username must not be longer than 30 characters.'),
+    .string('Bitte geben Sie Ihren Benutzernamen ein.')
+    .min(2, 'Der Benutzername muss mindestens 2 Zeichen lang sein.')
+    .max(30, 'Der Benutzername darf nicht länger als 30 Zeichen sein.'),
   email: z.email({
     error: (iss) =>
       iss.input === undefined
-        ? 'Please select an email to display.'
+        ? 'Bitte wählen Sie eine E-Mail-Adresse aus.'
         : undefined,
   }),
   bio: z.string().max(160).min(4),
   urls: z
     .array(
       z.object({
-        value: z.url('Please enter a valid URL.'),
+        value: z.url('Bitte geben Sie eine gültige URL ein.'),
       })
     )
     .optional(),
@@ -79,13 +79,13 @@ export function ProfileForm() {
           name='username'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Benutzername</FormLabel>
               <FormControl>
                 <Input placeholder='shadcn' {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                Dies ist Ihr öffentlicher Anzeigename. Es kann Ihr echter Name oder ein
+                Pseudonym sein. Sie können dies nur alle 30 Tage ändern.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -96,11 +96,11 @@ export function ProfileForm() {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-Mail</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder='Select a verified email to display' />
+                    <SelectValue placeholder='Wählen Sie eine verifizierte E-Mail-Adresse aus' />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -110,8 +110,8 @@ export function ProfileForm() {
                 </SelectContent>
               </Select>
               <FormDescription>
-                You can manage verified email addresses in your{' '}
-                <Link to='/'>email settings</Link>.
+                Sie können verifizierte E-Mail-Adressen in Ihren{' '}
+                <Link to='/'>E-Mail-Einstellungen</Link> verwalten.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -122,17 +122,17 @@ export function ProfileForm() {
           name='bio'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Bio</FormLabel>
+              <FormLabel>Biografie</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder='Tell us a little bit about yourself'
+                  placeholder='Erzählen Sie uns etwas über sich'
                   className='resize-none'
                   {...field}
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                Sie können andere Benutzer und Organisationen <span>@erwähnen</span>, um
+                sie zu verlinken.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -150,7 +150,7 @@ export function ProfileForm() {
                     URLs
                   </FormLabel>
                   <FormDescription className={cn(index !== 0 && 'sr-only')}>
-                    Add links to your website, blog, or social media profiles.
+                    Fügen Sie Links zu Ihrer Website, Ihrem Blog oder Ihren Social-Media-Profilen hinzu.
                   </FormDescription>
                   <FormControl className={cn(index !== 0 && 'mt-1.5')}>
                     <Input {...field} />
@@ -167,10 +167,10 @@ export function ProfileForm() {
             className='mt-2'
             onClick={() => append({ value: '' })}
           >
-            Add URL
+            URL hinzufügen
           </Button>
         </div>
-        <Button type='submit'>Update profile</Button>
+        <Button type='submit'>Profil aktualisieren</Button>
       </form>
     </Form>
   )

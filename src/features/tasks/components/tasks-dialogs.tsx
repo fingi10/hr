@@ -51,19 +51,19 @@ export function TasksDialogs() {
               }, 500)
               showSubmittedData(
                 currentRow,
-                'The following task has been deleted:'
+                'Die folgende Aufgabe wurde gelöscht:'
               )
             }}
             className='max-w-md'
-            title={`Delete this task: ${currentRow.id} ?`}
+            title={`Diese Aufgabe löschen: ${currentRow.id} ?`}
             desc={
               <>
-                You are about to delete a task with the ID{' '}
-                <strong>{currentRow.id}</strong>. <br />
-                This action cannot be undone.
+                Sie sind dabei, eine Aufgabe mit der ID{' '}
+                <strong>{currentRow.id}</strong> zu löschen. <br />
+                Diese Aktion kann nicht rückgängig gemacht werden.
               </>
             }
-            confirmText='Delete'
+            confirmText='Löschen'
           />
         </>
       )}

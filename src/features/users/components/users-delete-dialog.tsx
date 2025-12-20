@@ -26,7 +26,7 @@ export function UsersDeleteDialog({
     if (value.trim() !== currentRow.username) return
 
     onOpenChange(false)
-    showSubmittedData(currentRow, 'The following user has been deleted:')
+    showSubmittedData(currentRow, 'Der folgende Benutzer wurde gelöscht:')
   }
 
   return (
@@ -41,40 +41,40 @@ export function UsersDeleteDialog({
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
-          Delete User
+          Benutzer löschen
         </span>
       }
       desc={
         <div className='space-y-4'>
           <p className='mb-2'>
-            Are you sure you want to delete{' '}
-            <span className='font-bold'>{currentRow.username}</span>?
+            Sind Sie sicher, dass Sie{' '}
+            <span className='font-bold'>{currentRow.username}</span> löschen möchten?
             <br />
-            This action will permanently remove the user with the role of{' '}
+            Diese Aktion entfernt dauerhaft den Benutzer mit der Rolle{' '}
             <span className='font-bold'>
               {currentRow.role.toUpperCase()}
             </span>{' '}
-            from the system. This cannot be undone.
+            aus dem System. Dies kann nicht rückgängig gemacht werden.
           </p>
 
           <Label className='my-2'>
-            Username:
+            Benutzername:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter username to confirm deletion.'
+              placeholder='Geben Sie den Benutzernamen ein, um die Löschung zu bestätigen.'
             />
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
+            <AlertTitle>Warnung!</AlertTitle>
             <AlertDescription>
-              Please be careful, this operation can not be rolled back.
+              Bitte seien Sie vorsichtig, dieser Vorgang kann nicht rückgängig gemacht werden.
             </AlertDescription>
           </Alert>
         </div>
       }
-      confirmText='Delete'
+      confirmText='Löschen'
       destructive
     />
   )

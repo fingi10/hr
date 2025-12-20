@@ -29,7 +29,7 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: 'General',
+      title: 'Allgemein',
       items: [
         {
           title: 'Dashboard',
@@ -37,48 +37,48 @@ export const sidebarData: SidebarData = {
           icon: LayoutDashboard,
         },
         {
-          title: 'Search Candidates',
+          title: 'Kandidatensuche',
           url: '/search',
           icon: Users,
         },
       ],
     },
     {
-      title: 'Other',
+      title: 'Andere',
       items: [
         {
-          title: 'Settings',
+          title: 'Einstellungen',
           icon: Settings,
           items: [
             {
-              title: 'Profile',
+              title: 'Profil',
               url: '/settings',
               icon: UserCog,
             },
             {
-              title: 'Account',
+              title: 'Konto',
               url: '/settings/account',
               icon: Wrench,
             },
             {
-              title: 'Appearance',
+              title: 'Erscheinungsbild',
               url: '/settings/appearance',
               icon: Palette,
             },
             {
-              title: 'Notifications',
+              title: 'Benachrichtigungen',
               url: '/settings/notifications',
               icon: Bell,
             },
             {
-              title: 'Display',
+              title: 'Anzeige',
               url: '/settings/display',
               icon: Monitor,
             },
           ],
         },
         {
-          title: 'Help Center',
+          title: 'Hilfe-Center',
           url: '/help-center',
           icon: HelpCircle,
         },

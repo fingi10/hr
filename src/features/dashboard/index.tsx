@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { TopNav } from '@/components/layout/top-nav'
+
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -23,23 +23,21 @@ export function Dashboard() {
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <TopNav links={topNav} />
+        <div className='flex items-center gap-2 px-4'>
+          <h1 className='text-lg font-semibold'>Dashboard</h1>
+        </div>
         <div className='ms-auto flex items-center space-x-4'>
           <Search />
           <ThemeSwitch />
           <ConfigDrawer />
+
           <ProfileDropdown />
         </div>
       </Header>
 
       {/* ===== Main ===== */}
       <Main>
-        <div className='mb-2 flex items-center justify-between space-y-2'>
-          <h1 className='text-2xl font-bold tracking-tight'>Dashboard</h1>
-          <div className='flex items-center space-x-2'>
-            <Button>Download</Button>
-          </div>
-        </div>
+
         <Tabs
           orientation='vertical'
           defaultValue='overview'
@@ -47,13 +45,13 @@ export function Dashboard() {
         >
           <div className='w-full overflow-x-auto pb-2'>
             <TabsList>
-              <TabsTrigger value='overview'>Overview</TabsTrigger>
-              <TabsTrigger value='analytics'>Analytics</TabsTrigger>
+              <TabsTrigger value='overview'>Übersicht</TabsTrigger>
+              <TabsTrigger value='analytics'>Analysen</TabsTrigger>
               <TabsTrigger value='reports' disabled>
-                Reports
+                Berichte
               </TabsTrigger>
               <TabsTrigger value='notifications' disabled>
-                Notifications
+                Benachrichtigungen
               </TabsTrigger>
             </TabsList>
           </div>
@@ -62,7 +60,7 @@ export function Dashboard() {
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Total Candidates
+                    Kandidaten gesamt
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -82,14 +80,14 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>2,350</div>
                   <p className='text-xs text-muted-foreground'>
-                    +180 new this month
+                    +180 neu diesen Monat
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Active Jobs
+                    Aktive Stellen
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -107,13 +105,13 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>12</div>
                   <p className='text-xs text-muted-foreground'>
-                    +2 new positions
+                    +2 neue Positionen
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'>Applications</CardTitle>
+                  <CardTitle className='text-sm font-medium'>Bewerbungen</CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 24 24'
@@ -131,14 +129,14 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>+573</div>
                   <p className='text-xs text-muted-foreground'>
-                    +201 since last week
+                    +201 seit letzter Woche
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Interviews Today
+                    Interviews heute
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -156,7 +154,7 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>4</div>
                   <p className='text-xs text-muted-foreground'>
-                    2 pending feedback
+                    2 ausstehendes Feedback
                   </p>
                 </CardContent>
               </Card>
@@ -164,7 +162,7 @@ export function Dashboard() {
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
               <Card className='col-span-1 lg:col-span-4'>
                 <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                  <CardTitle>Übersicht</CardTitle>
                 </CardHeader>
                 <CardContent className='ps-2'>
                   <Overview />
@@ -172,9 +170,9 @@ export function Dashboard() {
               </Card>
               <Card className='col-span-1 lg:col-span-3'>
                 <CardHeader>
-                  <CardTitle>Recent Applications</CardTitle>
+                  <CardTitle>Aktuelle Bewerbungen</CardTitle>
                   <CardDescription>
-                    You have 265 new applications this month.
+                    Sie haben diesen Monat 265 neue Bewerbungen.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -192,29 +190,4 @@ export function Dashboard() {
   )
 }
 
-const topNav = [
-  {
-    title: 'Overview',
-    href: 'dashboard/overview',
-    isActive: true,
-    disabled: false,
-  },
-  {
-    title: 'Customers',
-    href: 'dashboard/customers',
-    isActive: false,
-    disabled: true,
-  },
-  {
-    title: 'Products',
-    href: 'dashboard/products',
-    isActive: false,
-    disabled: true,
-  },
-  {
-    title: 'Settings',
-    href: 'dashboard/settings',
-    isActive: false,
-    disabled: true,
-  },
-]
+

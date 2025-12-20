@@ -22,12 +22,12 @@ import { PasswordInput } from '@/components/password-input'
 
 const formSchema = z.object({
   email: z.email({
-    error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined),
+    error: (iss) => (iss.input === '' ? 'Bitte geben Sie Ihre E-Mail-Adresse ein' : undefined),
   }),
   password: z
     .string()
-    .min(1, 'Please enter your password')
-    .min(7, 'Password must be at least 7 characters long'),
+    .min(1, 'Bitte geben Sie Ihr Passwort ein')
+    .min(7, 'Das Passwort muss mindestens 7 Zeichen lang sein'),
 })
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {
@@ -55,7 +55,7 @@ export function UserAuthForm({
     setIsLoading(true)
 
     toast.promise(sleep(2000), {
-      loading: 'Signing in...',
+      loading: 'Anmeldung läuft...',
       success: () => {
         setIsLoading(false)
 
@@ -75,9 +75,9 @@ export function UserAuthForm({
         const targetPath = redirectTo || '/'
         navigate({ to: targetPath, replace: true })
 
-        return `Welcome back, ${data.email}!`
+        return `Willkommen zurück, ${data.email}!`
       },
-      error: 'Error',
+      error: 'Fehler',
     })
   }
 
@@ -93,7 +93,7 @@ export function UserAuthForm({
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-Mail</FormLabel>
               <FormControl>
                 <Input placeholder='name@example.com' {...field} />
               </FormControl>
@@ -106,7 +106,7 @@ export function UserAuthForm({
           name='password'
           render={({ field }) => (
             <FormItem className='relative'>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Passwort</FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -115,14 +115,14 @@ export function UserAuthForm({
                 to='/forgot-password'
                 className='absolute end-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75'
               >
-                Forgot password?
+                Passwort vergessen?
               </Link>
             </FormItem>
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
           {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
-          Sign in
+          Anmelden
         </Button>
 
         <div className='relative my-2'>
@@ -131,7 +131,7 @@ export function UserAuthForm({
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
             <span className='bg-background px-2 text-muted-foreground'>
-              Or continue with
+              Oder weiter mit
             </span>
           </div>
         </div>
