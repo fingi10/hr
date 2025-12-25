@@ -11,6 +11,7 @@ import {
   Command,
   GalleryVerticalEnd,
   Users,
+  Kanban,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 
@@ -40,6 +41,11 @@ export const sidebarData: SidebarData = {
           title: 'Kandidatensuche',
           url: '/search',
           icon: Users,
+        },
+        {
+          title: 'Recruiting Pipeline',
+          url: '/pipeline',
+          icon: Kanban,
         },
       ],
     },
