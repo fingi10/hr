@@ -6,14 +6,15 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AnalyticsChart } from './analytics-chart'
+import { Users, Clock, Target, TrendingUp } from 'lucide-react'
 
 export function Analytics() {
   return (
     <div className='space-y-4'>
       <Card>
         <CardHeader>
-          <CardTitle>Traffic-Übersicht</CardTitle>
-          <CardDescription>Wöchentliche Klicks und Besucher</CardDescription>
+          <CardTitle>Pipeline-Aktivität</CardTitle>
+          <CardDescription>Bewerbungseingang vs. geführte Interviews diese Woche</CardDescription>
         </CardHeader>
         <CardContent className='px-6'>
           <AnalyticsChart />
@@ -22,100 +23,53 @@ export function Analytics() {
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Gesamtklicks</CardTitle>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              className='h-4 w-4 text-muted-foreground'
-            >
-              <path d='M3 3v18h18' />
-              <path d='M7 15l4-4 4 4 4-6' />
-            </svg>
+            <CardTitle className='text-sm font-medium'>Conversion Rate</CardTitle>
+            <Target className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>1,248</div>
+            <div className='text-2xl font-bold'>24%</div>
             <p className='text-xs text-muted-foreground'>
-              +12.4% vs. letzte Woche
+              Bewerbung zu Interview
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>
-              Einzigartige Besucher
+              Time to Hire
             </CardTitle>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              className='h-4 w-4 text-muted-foreground'
-            >
-              <circle cx='12' cy='7' r='4' />
-              <path d='M6 21v-2a6 6 0 0 1 12 0v2' />
-            </svg>
+            <Clock className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>832</div>
+            <div className='text-2xl font-bold'>18 Tage</div>
             <p className='text-xs text-muted-foreground'>
-              +5.8% vs. letzte Woche
+              Durchschnittliche Dauer
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Absprungrate</CardTitle>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              className='h-4 w-4 text-muted-foreground'
-            >
-              <path d='M3 12h6l3 6 3-6h6' />
-            </svg>
+            <CardTitle className='text-sm font-medium'>Candidate Score</CardTitle>
+            <TrendingUp className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>42%</div>
+            <div className='text-2xl font-bold'>8.4</div>
             <p className='text-xs text-muted-foreground'>
-              -3.2% vs. letzte Woche
+              Ø KI-Matching Score
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>
-              Durchschn. Sitzung
+              Interviews p.W.
             </CardTitle>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              className='h-4 w-4 text-muted-foreground'
-            >
-              <circle cx='12' cy='12' r='10' />
-              <path d='M12 6v6l4 2' />
-            </svg>
+            <Users className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>3m 24s</div>
+            <div className='text-2xl font-bold'>21</div>
             <p className='text-xs text-muted-foreground'>
-              +18s vs. letzte Woche
+              Geführte Gespräche
             </p>
           </CardContent>
         </Card>
@@ -123,16 +77,16 @@ export function Analytics() {
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
         <Card className='col-span-1 lg:col-span-4'>
           <CardHeader>
-            <CardTitle>Herkunft</CardTitle>
-            <CardDescription>Top-Traffic-Quellen</CardDescription>
+            <CardTitle>Kanäle</CardTitle>
+            <CardDescription>Woher kommen die meisten Kandidaten?</CardDescription>
           </CardHeader>
           <CardContent>
             <SimpleBarList
               items={[
-                { name: 'Direct', value: 512 },
-                { name: 'Product Hunt', value: 238 },
-                { name: 'Twitter', value: 174 },
-                { name: 'Blog', value: 104 },
+                { name: 'LinkedIn / KI-Suche', value: 428 },
+                { name: 'Direct Sourcing', value: 154 },
+                { name: 'Employee Referral', value: 92 },
+                { name: 'Stellenanzeigen', value: 54 },
               ]}
               barClass='bg-primary'
               valueFormatter={(n) => `${n}`}
@@ -141,15 +95,16 @@ export function Analytics() {
         </Card>
         <Card className='col-span-1 lg:col-span-3'>
           <CardHeader>
-            <CardTitle>Geräte</CardTitle>
-            <CardDescription>Verwendete Geräte</CardDescription>
+            <CardTitle>Top Rollen</CardTitle>
+            <CardDescription>Bewerber nach Fachbereich</CardDescription>
           </CardHeader>
           <CardContent>
             <SimpleBarList
               items={[
-                { name: 'Desktop', value: 74 },
-                { name: 'Mobile', value: 22 },
-                { name: 'Tablet', value: 4 },
+                { name: 'Engineering', value: 55 },
+                { name: 'Sales / BD', value: 25 },
+                { name: 'Product', value: 15 },
+                { name: 'Operations', value: 5 },
               ]}
               barClass='bg-muted-foreground'
               valueFormatter={(n) => `${n}%`}

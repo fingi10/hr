@@ -1,41 +1,13 @@
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts'
 
 const data = [
-  {
-    name: 'Mon',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Tue',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Wed',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Thu',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Fri',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Sat',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: 'Sun',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
+  { name: 'Mo', applications: 12, interviews: 2 },
+  { name: 'Di', applications: 18, interviews: 4 },
+  { name: 'Mi', applications: 15, interviews: 3 },
+  { name: 'Do', applications: 22, interviews: 6 },
+  { name: 'Fr', applications: 19, interviews: 5 },
+  { name: 'Sa', applications: 8, interviews: 1 },
+  { name: 'So', applications: 5, interviews: 0 },
 ]
 
 export function AnalyticsChart() {
@@ -55,9 +27,29 @@ export function AnalyticsChart() {
           tickLine={false}
           axisLine={false}
         />
+        <Tooltip
+          content={({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="rounded-lg border bg-background p-2 shadow-sm text-xs">
+                  <div className="font-bold mb-1">{label}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary" />
+                    <span>Bewerbungen: {payload[0].value}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-muted-foreground" />
+                    <span>Interviews: {payload[1].value}</span>
+                  </div>
+                </div>
+              )
+            }
+            return null
+          }}
+        />
         <Area
           type='monotone'
-          dataKey='clicks'
+          dataKey='applications'
           stroke='currentColor'
           className='text-primary'
           fill='currentColor'
@@ -65,7 +57,7 @@ export function AnalyticsChart() {
         />
         <Area
           type='monotone'
-          dataKey='uniques'
+          dataKey='interviews'
           stroke='currentColor'
           className='text-muted-foreground'
           fill='currentColor'

@@ -1,83 +1,38 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { usePipelineStore } from '@/stores/pipeline-store'
 
 export function RecentSales() {
+  const { candidates } = usePipelineStore()
+
+  // Sort by some criteria? For now just take the last 5 added (assuming they are appended)
+  const recentCandidates = [...candidates].reverse().slice(0, 5)
+
+  if (recentCandidates.length === 0) {
+    return (
+      <div className='flex h-[350px] items-center justify-center text-sm text-muted-foreground'>
+        Keine Kandidaten in der Pipeline.
+      </div>
+    )
+  }
+
   return (
     <div className='space-y-8'>
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/01.png' alt='Avatar' />
-          <AvatarFallback>OM</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-            <p className='text-sm leading-none font-medium'>Olivia Martin</p>
-            <p className='text-sm text-muted-foreground'>
-              olivia.martin@email.com
-            </p>
+      {recentCandidates.map((candidate) => (
+        <div key={candidate.id} className='flex items-center gap-4'>
+          <Avatar className='h-9 w-9'>
+            <AvatarFallback>{candidate.avatar}</AvatarFallback>
+          </Avatar>
+          <div className='flex flex-1 flex-wrap items-center justify-between'>
+            <div className='space-y-1'>
+              <p className='text-sm leading-none font-medium'>{candidate.name}</p>
+              <p className='text-sm text-muted-foreground'>
+                {candidate.email}
+              </p>
+            </div>
+            <div className='font-medium text-sm text-primary'>{candidate.role}</div>
           </div>
-          <div className='font-medium text-sm'>Product Manager</div>
         </div>
-      </div>
-      <div className='flex items-center gap-4'>
-        <Avatar className='flex h-9 w-9 items-center justify-center space-y-0 border'>
-          <AvatarImage src='/avatars/02.png' alt='Avatar' />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-            <p className='text-sm leading-none font-medium'>Jackson Lee</p>
-            <p className='text-sm text-muted-foreground'>
-              jackson.lee@email.com
-            </p>
-          </div>
-          <div className='font-medium text-sm'>Frontend Developer</div>
-        </div>
-      </div>
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/03.png' alt='Avatar' />
-          <AvatarFallback>IN</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-            <p className='text-sm leading-none font-medium'>Isabella Nguyen</p>
-            <p className='text-sm text-muted-foreground'>
-              isabella.nguyen@email.com
-            </p>
-          </div>
-          <div className='font-medium text-sm'>UX Designer</div>
-        </div>
-      </div>
-
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/04.png' alt='Avatar' />
-          <AvatarFallback>WK</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-            <p className='text-sm leading-none font-medium'>William Kim</p>
-            <p className='text-sm text-muted-foreground'>will@email.com</p>
-          </div>
-          <div className='font-medium text-sm'>QA Engineer</div>
-        </div>
-      </div>
-
-      <div className='flex items-center gap-4'>
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='/avatars/05.png' alt='Avatar' />
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-1 flex-wrap items-center justify-between'>
-          <div className='space-y-1'>
-            <p className='text-sm leading-none font-medium'>Sofia Davis</p>
-            <p className='text-sm text-muted-foreground'>
-              sofia.davis@email.com
-            </p>
-          </div>
-          <div className='font-medium text-sm'>Data Analyst</div>
-        </div>
-      </div>
+      ))}
     </div>
   )
 }

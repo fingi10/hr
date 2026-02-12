@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export interface PipelineCandidate {
-    id: number
+    id: string
     name: string
     role: string
     department: string
@@ -24,10 +24,10 @@ export interface PipelineCandidate {
 interface PipelineState {
     candidates: PipelineCandidate[]
     addCandidate: (candidate: Omit<PipelineCandidate, 'stageId' | 'daysInStage' | 'priority'>) => void
-    removeCandidate: (id: number) => void
-    moveCandidate: (id: number, newStageId: string) => void
-    updateCandidate: (id: number, updates: Partial<PipelineCandidate>) => void
-    isCandidateInPipeline: (id: number) => boolean
+    removeCandidate: (id: string) => void
+    moveCandidate: (id: string, newStageId: string) => void
+    updateCandidate: (id: string, updates: Partial<PipelineCandidate>) => void
+    isCandidateInPipeline: (id: string) => boolean
 }
 
 export const usePipelineStore = create<PipelineState>()(

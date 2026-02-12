@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Search as SearchIcon, SlidersHorizontal } from 'lucide-react'
+import { Search as SearchIcon, SlidersHorizontal, Loader2, ExternalLink } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -39,116 +40,48 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
-
-
-const MOCK_CANDIDATES = [
-    {
-        id: 1,
-        name: 'Sarah Wilson',
-        role: 'Marketing Manager',
-        department: 'Marketing',
-        skills: ['Brand Strategy', 'Digital Marketing', 'Analytics'],
-        status: 'Available',
-        experience: '8 years',
-        experienceYears: 8,
-        location: 'New York',
-        education: 'MBA',
-        salary: '$120k - $150k',
-        avatar: 'SW'
-    },
-    {
-        id: 2,
-        name: 'Michael Chen',
-        role: 'Financial Analyst',
-        department: 'Finance',
-        skills: ['Financial Modeling', 'Excel', 'SAP'],
-        status: 'Interviewing',
-        experience: '5 years',
-        experienceYears: 5,
-        location: 'San Francisco',
-        education: 'Bachelor',
-        salary: '$90k - $110k',
-        avatar: 'MC'
-    },
-    {
-        id: 3,
-        name: 'Emma Rodriguez',
-        role: 'HR Business Partner',
-        department: 'Human Resources',
-        skills: ['Talent Acquisition', 'Employee Relations', 'HRIS'],
-        status: 'Available',
-        experience: '6 years',
-        experienceYears: 6,
-        location: 'Remote',
-        education: 'Master',
-        salary: '$100k - $130k',
-        avatar: 'ER'
-    },
-    {
-        id: 4,
-        name: 'James Kimball',
-        role: 'Operations Director',
-        department: 'Operations',
-        skills: ['Process Optimization', 'Lean Six Sigma', 'Supply Chain'],
-        status: 'Hired',
-        experience: '12 years',
-        experienceYears: 12,
-        location: 'Chicago',
-        education: 'MBA',
-        salary: '$150k - $180k',
-        avatar: 'JK'
-    },
-    {
-        id: 5,
-        name: 'Lisa Wang',
-        role: 'Software Engineer',
-        department: 'Technology',
-        skills: ['React', 'Python', 'Cloud Architecture'],
-        status: 'Available',
-        experience: '4 years',
-        experienceYears: 4,
-        location: 'Remote',
-        education: 'Bachelor',
-        salary: '$110k - $140k',
-        avatar: 'LW'
-    },
-    {
-        id: 6,
-        name: 'David Thompson',
-        role: 'Sales Executive',
-        department: 'Sales',
-        skills: ['Enterprise Sales', 'CRM', 'Negotiation'],
-        status: 'Available',
-        experience: '7 years',
-        experienceYears: 7,
-        location: 'Boston',
-        education: 'Bachelor',
-        salary: '$95k - $120k',
-        avatar: 'DT'
-    },
-]
+import { searchCandidates } from './api'
+import { SearchFilters } from './types'
+import { usePipelineStore } from '@/stores/pipeline-store'
+import { toast } from 'sonner'
 
 const QUICK_SEARCHES = [
     'Marketing', 'Engineering', 'Remote', 'Senior', 'Finance', 'Sales'
 ]
 
 export default function CandidateSearch() {
+    const { addCandidate, isCandidateInPipeline } = usePipelineStore()
     const [searchTerm, setSearchTerm] = useState('')
+    const [submittedSearchTerm, setSubmittedSearchTerm] = useState('')
 
     // Applied filters (affecting search results)
-    const [appliedExperienceFilter, setAppliedExperienceFilter] = useState('all')
+    const [appliedExperienceFilter, setAppliedExperienceFilter] = useState<SearchFilters['experience']>('all')
     const [appliedLocationCity, setAppliedLocationCity] = useState('')
     const [appliedLocationRadius, setAppliedLocationRadius] = useState('')
-    const [appliedEducationFilter, setAppliedEducationFilter] = useState('all')
+    const [appliedEducationFilter, setAppliedEducationFilter] = useState<SearchFilters['education']>('all')
 
     // Draft filters (inside dialog)
-    const [draftExperienceFilter, setDraftExperienceFilter] = useState('all')
+    const [draftExperienceFilter, setDraftExperienceFilter] = useState<SearchFilters['experience']>('all')
     const [draftLocationCity, setDraftLocationCity] = useState('')
     const [draftLocationRadius, setDraftLocationRadius] = useState('')
-    const [draftEducationFilter, setDraftEducationFilter] = useState('all')
+    const [draftEducationFilter, setDraftEducationFilter] = useState<SearchFilters['education']>('all')
 
     const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [hasSearched, setHasSearched] = useState(false)
+
+    // React Query for fetching candidates - only triggers when submittedSearchTerm changes
+    const { data: candidates = [], isLoading, error } = useQuery({
+        queryKey: ['candidates', submittedSearchTerm, appliedExperienceFilter, appliedLocationCity, appliedEducationFilter],
+        queryFn: () => searchCandidates(submittedSearchTerm, {
+            experience: appliedExperienceFilter,
+            locationCity: appliedLocationCity,
+            locationRadius: appliedLocationRadius,
+            education: appliedEducationFilter,
+        }),
+        enabled: hasSearched && submittedSearchTerm.length > 0,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        refetchOnWindowFocus: false,
+    })
 
     // Sync applied filters to draft when opening
     const handleDialogOpenChange = (open: boolean) => {
@@ -167,6 +100,7 @@ export default function CandidateSearch() {
         setAppliedLocationRadius(draftLocationRadius)
         setAppliedEducationFilter(draftEducationFilter)
         setIsFilterOpen(false)
+        setHasSearched(true)
     }
 
     const resetDraftFilters = () => {
@@ -189,38 +123,30 @@ export default function CandidateSearch() {
         appliedEducationFilter !== 'all',
     ].filter(Boolean).length
 
-    const filteredCandidates = MOCK_CANDIDATES.filter((candidate) => {
-        const matchesSearch =
-            candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            candidate.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            candidate.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            candidate.location.toLowerCase().includes(searchTerm.toLowerCase())
-
-
-        const matchesLocation = appliedLocationCity === '' || candidate.location.toLowerCase().includes(appliedLocationCity.toLowerCase())
-        const matchesEducation = appliedEducationFilter === 'all' || candidate.education === appliedEducationFilter
-
-        let matchesExperience = true
-        if (appliedExperienceFilter === 'entry') matchesExperience = candidate.experienceYears <= 2
-        else if (appliedExperienceFilter === 'mid') matchesExperience = candidate.experienceYears > 2 && candidate.experienceYears <= 5
-        else if (appliedExperienceFilter === 'senior') matchesExperience = candidate.experienceYears > 5 && candidate.experienceYears <= 10
-        else if (appliedExperienceFilter === 'executive') matchesExperience = candidate.experienceYears > 10
-
-        return matchesSearch && matchesExperience && matchesLocation && matchesEducation
-    })
-
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value)
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && searchTerm.trim()) {
-            setHasSearched(true)
+            executeSearch()
         }
     }
 
     const handleQuickSearch = (term: string) => {
         setSearchTerm(term)
+        setSubmittedSearchTerm(term)
+        setHasSearched(true)
+    }
+
+    const handleSearchClick = () => {
+        if (searchTerm.trim()) {
+            executeSearch()
+        }
+    }
+
+    const executeSearch = () => {
+        setSubmittedSearchTerm(searchTerm)
         setHasSearched(true)
     }
 
@@ -271,6 +197,21 @@ export default function CandidateSearch() {
                                 onKeyDown={handleKeyDown}
                             />
                         </div>
+
+                        <Button
+                            className="h-12 px-6"
+                            onClick={handleSearchClick}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Suche...
+                                </>
+                            ) : (
+                                'Suchen'
+                            )}
+                        </Button>
 
                         <Dialog open={isFilterOpen} onOpenChange={handleDialogOpenChange}>
                             <DialogTrigger asChild>
@@ -323,7 +264,7 @@ export default function CandidateSearch() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <Label className="text-xs text-muted-foreground uppercase tracking-wide">Erfahrung</Label>
-                                            <Select value={draftExperienceFilter} onValueChange={setDraftExperienceFilter}>
+                                            <Select value={draftExperienceFilter} onValueChange={(value) => setDraftExperienceFilter(value as SearchFilters['experience'])}>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Alle" />
                                                 </SelectTrigger>
@@ -338,7 +279,7 @@ export default function CandidateSearch() {
                                         </div>
                                         <div className="space-y-2">
                                             <Label className="text-xs text-muted-foreground uppercase tracking-wide">Ausbildung</Label>
-                                            <Select value={draftEducationFilter} onValueChange={setDraftEducationFilter}>
+                                            <Select value={draftEducationFilter} onValueChange={(value) => setDraftEducationFilter(value as SearchFilters['education'])}>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Alle" />
                                                 </SelectTrigger>
@@ -390,7 +331,16 @@ export default function CandidateSearch() {
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-base font-medium">
-                                    {filteredCandidates.length} Kandidaten
+                                    {isLoading ? (
+                                        <span className="flex items-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Suche läuft...
+                                        </span>
+                                    ) : error ? (
+                                        'Fehler beim Laden'
+                                    ) : (
+                                        'Suchergebnisse'
+                                    )}
                                 </CardTitle>
                                 {activeFilters > 0 && (
                                     <Button variant="ghost" size="sm" onClick={clearAllFilters}>
@@ -400,74 +350,118 @@ export default function CandidateSearch() {
                             </div>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="pl-6">Name</TableHead>
-                                        <TableHead>Rolle</TableHead>
-                                        <TableHead>Standort</TableHead>
-                                        <TableHead>Erfahrung</TableHead>
-                                        <TableHead>Fähigkeiten</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead className="text-right pr-6"></TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredCandidates.map((candidate) => (
-                                        <TableRow key={candidate.id}>
-                                            <TableCell className="pl-6">
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar className="h-8 w-8">
-                                                        <AvatarFallback className="text-xs">
-                                                            {candidate.avatar}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <div className="font-medium">{candidate.name}</div>
-                                                        <div className="text-xs text-muted-foreground">{candidate.department}</div>
-                                                    </div>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>{candidate.role}</TableCell>
-                                            <TableCell className="text-muted-foreground">{candidate.location}</TableCell>
-                                            <TableCell className="text-muted-foreground">{candidate.experience}</TableCell>
-                                            <TableCell>
-                                                <div className="flex gap-1">
-                                                    {candidate.skills.slice(0, 2).map((skill) => (
-                                                        <Badge key={skill} variant="secondary" className="text-xs font-normal">
-                                                            {skill}
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant={candidate.status === 'Available' ? 'default' : 'secondary'}
-                                                    className="font-normal"
-                                                >
-                                                    {candidate.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right pr-6">
-                                                <Button variant="ghost" size="sm">
-                                                    Ansehen
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    {filteredCandidates.length === 0 && (
+                            {error && (
+                                <div className="text-center py-10 text-destructive">
+                                    <p>Fehler beim Laden der Kandidaten.</p>
+                                    <p className="text-sm text-muted-foreground mt-2">
+                                        Bitte überprüfen Sie Ihren API-Schlüssel und versuchen Sie es erneut.
+                                    </p>
+                                </div>
+                            )}
+                            {!error && (
+                                <Table>
+                                    <TableHeader>
                                         <TableRow>
-                                            <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
-                                                Keine Kandidaten gefunden.
-                                            </TableCell>
+                                            <TableHead className="pl-6">Name</TableHead>
+                                            <TableHead>Rolle</TableHead>
+                                            <TableHead>Standort</TableHead>
+                                            <TableHead>Erfahrung</TableHead>
+                                            <TableHead>Fähigkeiten</TableHead>
+                                            <TableHead className="text-right pr-6">Aktionen</TableHead>
                                         </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {isLoading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="text-center py-10">
+                                                    <Loader2 className="h-6 w-6 animate-spin mx-auto" />
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : candidates.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
+                                                    Keine Kandidaten gefunden.
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            candidates.map((candidate) => {
+                                                const isInPipeline = isCandidateInPipeline(candidate.id)
+
+                                                return (
+                                                    <TableRow key={candidate.id}>
+                                                        <TableCell className="pl-6">
+                                                            <div className="flex items-center gap-3">
+                                                                <Avatar className="h-8 w-8">
+                                                                    <AvatarFallback className="text-xs">
+                                                                        {candidate.avatar}
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <div>
+                                                                    {candidate.profileUrl ? (
+                                                                        <a
+                                                                            href={candidate.profileUrl}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="font-medium hover:underline text-primary inline-flex items-center gap-1"
+                                                                        >
+                                                                            {candidate.name}
+                                                                            <ExternalLink className="h-3 w-3" />
+                                                                        </a>
+                                                                    ) : (
+                                                                        <div className="font-medium">{candidate.name}</div>
+                                                                    )}
+                                                                    <div className="text-xs text-muted-foreground">{candidate.department}</div>
+                                                                </div>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>{candidate.role}</TableCell>
+                                                        <TableCell className="text-muted-foreground">{candidate.location}</TableCell>
+                                                        <TableCell className="text-muted-foreground">{candidate.experience}</TableCell>
+                                                        <TableCell>
+                                                            <div className="flex gap-1 flex-wrap">
+                                                                {candidate.skills.slice(0, 3).map((skill) => (
+                                                                    <Badge key={skill} variant="secondary" className="text-xs font-normal">
+                                                                        {skill}
+                                                                    </Badge>
+                                                                ))}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="text-right pr-6">
+                                                            <Button
+                                                                variant={isInPipeline ? "secondary" : "default"}
+                                                                size="sm"
+                                                                disabled={isInPipeline}
+                                                                onClick={() => {
+                                                                    addCandidate({
+                                                                        id: candidate.id,
+                                                                        name: candidate.name,
+                                                                        role: candidate.role,
+                                                                        department: candidate.department,
+                                                                        avatar: candidate.avatar,
+                                                                        skills: candidate.skills,
+                                                                        email: candidate.email || '',
+                                                                        phone: candidate.phone || '',
+                                                                        location: candidate.location,
+                                                                        education: candidate.education,
+                                                                        salary: candidate.salary
+                                                                    })
+                                                                    toast.success(`${candidate.name} wurde zur Pipeline hinzugefügt`)
+                                                                }}
+                                                            >
+                                                                {isInPipeline ? 'In Pipeline' : 'In Pipeline aufnehmen'}
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            )}
                         </CardContent>
                     </Card>
                 )}
-            </Main>
+            </Main >
         </>
     )
 }
