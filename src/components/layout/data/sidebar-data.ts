@@ -7,20 +7,13 @@ import {
   Settings,
   Wrench,
   UserCog,
-  AudioWaveform,
   Command,
-  GalleryVerticalEnd,
   Users,
   Kanban,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: 'testuser',
-    email: 'testuser@gmail.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   teams: [
     {
       name: 'Novahire',

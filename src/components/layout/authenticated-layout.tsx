@@ -19,12 +19,12 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
   const { auth } = useAuthStore()
 
   useEffect(() => {
-    if (!auth.accessToken) {
+    if (auth.isInitialized && !auth.accessToken) {
       navigate({ to: '/sign-in', replace: true })
     }
-  }, [auth.accessToken, navigate])
+  }, [auth.accessToken, auth.isInitialized, navigate])
 
-  if (!auth.accessToken) {
+  if (!auth.isInitialized || !auth.accessToken) {
     return null
   }
 

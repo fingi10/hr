@@ -5,8 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
 import { Loader2, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
-import { useAuthStore } from '@/stores/auth-store'
-import { sleep, cn } from '@/lib/utils'
+import { supabase } from '@/lib/supabase'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -40,48 +40,41 @@ export function UserAuthForm({
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { auth } = useAuthStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'delschad.jankir@gmx.de',
+      email: '',
       password: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
 
-    // Hardcoded credentials check
-    if (data.email === 'delschad.jankir@gmx.de' && data.password === '123456') {
-      toast.promise(sleep(1000), {
-        loading: 'Anmeldung läuft...',
-        success: () => {
-          setIsLoading(false)
-
-          const mockUser = {
-            accountNo: 'ACC001',
-            email: data.email,
-            role: ['user'],
-            exp: Date.now() + 24 * 60 * 60 * 1000,
-          }
-
-          auth.setUser(mockUser)
-          auth.setAccessToken('valid-mock-token')
-
-          const targetPath = redirectTo || '/'
-          navigate({ to: targetPath, replace: true })
-
-          return `Willkommen zurück!`
-        },
-        error: 'Fehler bei der Anmeldung',
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       })
-    } else {
-      setTimeout(() => {
+
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error('Login error:', error)
+        toast.error(error.message || 'Ungültige E-Mail oder Passwort')
         setIsLoading(false)
-        toast.error('Ungültige E-Mail oder Passwort')
-      }, 1000)
+        return
+      }
+
+      toast.success('Willkommen zurück!')
+      const targetPath = redirectTo || '/'
+      // Wait a moment for store to sync
+      setTimeout(() => {
+        navigate({ to: targetPath, replace: true })
+      }, 500)
+    } catch (err) {
+      toast.error('Ein Fehler ist bei der Anmeldung aufgetreten')
+      setIsLoading(false)
     }
   }
 
